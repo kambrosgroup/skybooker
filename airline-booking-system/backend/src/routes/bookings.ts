@@ -563,11 +563,6 @@ router.post('/:bookingId/sync',
   bookingController.syncBookingWithAmadeus
 );
 
-export default router;essage: 'Get booking by PNR endpoint not yet implemented'
-    }
-  });
-});
-
 router.put('/:pnr', (req: Request, res: Response) => {
   res.status(501).json({
     error: {
