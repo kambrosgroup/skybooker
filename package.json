@@ -6,6 +6,7 @@
     "airline-booking-system/frontend"
   ],
   "scripts": {
+    "prestart": "yarn workspace airline-booking-backend run build",
     "start": "yarn workspace airline-booking-backend run start",
     "dev": "yarn workspace airline-booking-backend run dev",
     "build": "yarn workspace airline-booking-backend run build",
