@@ -1,0 +1,17 @@
+{
+  "name": "skybooker-monorepo",
+  "private": true,
+  "workspaces": [
+    "airline-booking-system/backend",
+    "airline-booking-system/frontend"
+  ],
+  "scripts": {
+    "start": "npm --workspace airline-booking-system/backend start",
+    "dev": "npm --workspace airline-booking-system/backend run dev",
+    "build": "npm --workspace airline-booking-system/backend run build",
+    "test": "npm --workspace airline-booking-system/backend test"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
