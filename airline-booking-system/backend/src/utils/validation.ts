@@ -316,203 +316,6 @@ export const resendVerificationSchema = Joi.object({
     })
 });
 
-// Flight search validation schema
-export const flightSearchSchema = Joi.object({
-  origin: Joi.string()
-    .length(3)
-    .uppercase()
-    .required()
-    .messages({
-      'string.length': 'Origin must be a valid 3-letter airport code',
-      'any.required': 'Origin airport is required'
-    }),
-  
-  destination: Joi.string()
-    .length(3)
-    .uppercase()
-    .required()
-    .messages({
-      'string.length': 'Destination must be a valid 3-letter airport code',
-      'any.required': 'Destination airport is required'
-    }),
-  
-  departureDate: Joi.date()
-    .min('now')
-    .required()
-    .messages({
-      'date.min': 'Departure date must be in the future',
-      'any.required': 'Departure date is required'
-    }),
-  
-  returnDate: Joi.date()
-    .min(Joi.ref('departureDate'))
-    .optional()
-    .messages({
-      'date.min': 'Return date must be after departure date'
-    }),
-  
-  passengers: Joi.object({
-    adults: Joi.number()
-      .integer()
-      .min(1)
-      .max(9)
-      .default(1)
-      .messages({
-        'number.min': 'At least 1 adult passenger is required',
-        'number.max': 'Maximum 9 passengers allowed'
-      }),
-    
-    children: Joi.number()
-      .integer()
-      .min(0)
-      .max(8)
-      .default(0)
-      .messages({
-        'number.min': 'Children count cannot be negative',
-        'number.max': 'Maximum 8 children allowed'
-      }),
-    
-    infants: Joi.number()
-      .integer()
-      .min(0)
-      .max(8)
-      .default(0)
-      .messages({
-        'number.min': 'Infants count cannot be negative',
-        'number.max': 'Maximum 8 infants allowed'
-      })
-  }).optional(),
-  
-  cabin: Joi.string()
-    .valid('ECONOMY', 'PREMIUM_ECONOMY', 'BUSINESS', 'FIRST')
-    .default('ECONOMY')
-    .optional(),
-  
-  currency: Joi.string()
-    .length(3)
-    .uppercase()
-    .default('USD')
-    .optional(),
-  
-  maxPrice: Joi.number()
-    .positive()
-    .optional(),
-  
-  directFlightsOnly: Joi.boolean()
-    .default(false)
-    .optional(),
-  
-  maxStops: Joi.number()
-    .integer()
-    .min(0)
-    .max(3)
-    .optional(),
-  
-  preferredAirlines: Joi.array()
-    .items(Joi.string().length(2).uppercase())
-    .optional(),
-  
-  excludedAirlines: Joi.array()
-    .items(Joi.string().length(2).uppercase())
-    .optional()
-});
-
-// Booking creation validation schema
-export const createBookingSchema = Joi.object({
-  flightOffers: Joi.array()
-    .items(Joi.string().required())
-    .min(1)
-    .required()
-    .messages({
-      'array.min': 'At least one flight offer is required',
-      'any.required': 'Flight offers are required'
-    }),
-  
-  passengers: Joi.array()
-    .items(Joi.object({
-      type: Joi.string()
-        .valid('ADULT', 'CHILD', 'INFANT', 'SENIOR')
-        .required(),
-      
-      title: Joi.string()
-        .valid('Mr', 'Mrs', 'Ms', 'Dr', 'Prof')
-        .required(),
-      
-      firstName: Joi.string()
-        .trim()
-        .min(1)
-        .max(50)
-        .required(),
-      
-      lastName: Joi.string()
-        .trim()
-        .min(1)
-        .max(50)
-        .required(),
-      
-      gender: Joi.string()
-        .valid('Male', 'Female', 'Other')
-        .required(),
-      
-      dateOfBirth: Joi.date()
-        .max('now')
-        .required(),
-      
-      nationality: Joi.string()
-        .trim()
-        .max(50)
-        .required(),
-      
-      passportNumber: Joi.string()
-        .trim()
-        .max(20)
-        .optional(),
-      
-      passportExpiry: Joi.date()
-        .min('now')
-        .optional(),
-      
-      email: Joi.string()
-        .email()
-        .optional(),
-      
-      phone: Joi.string()
-        .pattern(new RegExp('^\\+?[\\d\\s\\-\\(\\)]+$'))
-        .optional(),
-      
-      specialRequests: Joi.array()
-        .items(Joi.string())
-        .optional(),
-      
-      seatPreference: Joi.string()
-        .valid('Window', 'Aisle', 'Middle')
-        .optional()
-    }))
-    .min(1)
-    .required()
-    .messages({
-      'array.min': 'At least one passenger is required',
-      'any.required': 'Passenger information is required'
-    }),
-  
-  contactInfo: Joi.object({
-    email: Joi.string()
-      .email()
-      .required(),
-    
-    phone: Joi.string()
-      .pattern(new RegExp('^\\+?[\\d\\s\\-\\(\\)]+$'))
-      .required()
-  }).required(),
-  
-  specialRequests: Joi.array()
-    .items(Joi.string())
-    .optional(),
-  
-  promoCode: Joi.string()
-    .trim()
-    .optional()
-});
 
 // Validation middleware factory
 export const validate = (schema: Joi.ObjectSchema) => {
@@ -545,20 +348,6 @@ export const validate = (schema: Joi.ObjectSchema) => {
   };
 };
 
-export default {
-  registerSchema,
-  loginSchema,
-  refreshTokenSchema,
-  forgotPasswordSchema,
-  resetPasswordSchema,
-  changePasswordSchema,
-  updateProfileSchema,
-  emailVerificationSchema,
-  resendVerificationSchema,
-  flightSearchSchema,
-  createBookingSchema,
-  validate
-};
 
 
 
@@ -1039,3 +828,23 @@ export const pnrSearchSchema = Joi.object({
     'object.missing': 'Either last name or email is required for verification'
   });
 
+
+export default {
+  registerSchema,
+  loginSchema,
+  refreshTokenSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  changePasswordSchema,
+  updateProfileSchema,
+  emailVerificationSchema,
+  resendVerificationSchema,
+  flightSearchSchema,
+  bookingCreateSchema,
+  bookingUpdateSchema,
+  flightPricingSchema,
+  locationSearchSchema,
+  airlineInfoSchema,
+  pnrSearchSchema,
+  validate
+};
